@@ -5,7 +5,9 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.css';
+import './css/custom.css';
+// import './css/index.css';
+// import './js/colorMode';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

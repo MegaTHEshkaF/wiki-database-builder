@@ -16,14 +16,18 @@ function App() {
     return (
         <>
             <Menubar />
-            <Navbar />
-            <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/structure' element={<Structure />} />
-                <Route path='/translation' element={<Translation />} />
-                <Route path='/export' element={<Export />} />
-                <Route path='/settings' element={<Settings />} />
-            </Routes>
+            <div className='wrapper'>
+                <Navbar />
+                <main className='workspace'>
+                    <Routes>
+                        <Route path='/' element={<Home />} />
+                        <Route path='/structure' element={<Structure />} />
+                        <Route path='/translation' element={<Translation />} />
+                        <Route path='/export' element={<Export />} />
+                        <Route path='/settings' element={<Settings />} />
+                    </Routes>
+                </main>
+            </div>
             <StatusBar />
         </>
     );

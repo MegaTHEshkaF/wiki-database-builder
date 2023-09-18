@@ -15,6 +15,7 @@ function CreateMainWindow() {
             minWidth: 1280,
             minHeight: 720,
             icon: path.join(__dirname, '/favicon.ico'),
+            titleBarStyle: "hidden",
             webPreferences: {
                 nodeIntegration: true,
                 enableRemoteModule: true,
@@ -96,6 +97,17 @@ app.on('window-all-closed', () => {
 // Open a window if none are open (macOS)
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) CreateMainWindow();
+});
+
+// Menubar commands
+ipcMain.on('app:minimize', (event) => {
+    mainWindow.minimize();
+});
+ipcMain.on('app:maximize-restore', (event) => {
+    mainWindow.isMaximized()? mainWindow.restore() : mainWindow.maximize();
+});
+ipcMain.on('app:close', (event) => {
+    mainWindow.close();
 });
 
 // Listen for renderer events

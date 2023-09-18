@@ -1,0 +1,105 @@
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../node_modules/bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+
+// 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
+
+// Layout size variables
+$menubar-height: 26px;
+$statusbar-height: 26px;
+$navbar-width: 54px;
+
+:root {
+    // Light theme
+    --layout-border: solid 1px #{$gray-200};
+    --workspace-background: #{$gray-200};
+    --menubar-hover: #{$body-tertiary-bg};
+}
+
+html[data-bs-theme=dark] {
+    // Dark theme
+    --layout-border: solid 1px #{$gray-700};
+    --workspace-background: #{$gray-800};
+    --menubar-hover: #{$body-tertiary-bg-dark};
+}
+
+.menubar {
+    height: $menubar-height;
+    font-size: 12px;
+    border-bottom: var(--layout-border);
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+
+    button {
+        height: 100%;
+        border: none;
+        background: none;
+        line-height: 0;
+        transition: 200ms;
+        -webkit-app-region: no-drag;
+
+        &.appBtn {
+            width: 50px;
+
+            &#close:hover {
+                background-color: $red-500;
+            }
+        }
+        &.themeSwitcher {
+            border-radius: 20px;
+        }
+
+        &:hover {
+            background-color: var(--menubar-hover);
+        }
+
+        svg {
+            font-size: 16px;
+        }
+    }
+    .dropdown.show button {
+        background-color:  var(--menubar-hover);
+    }
+}
+
+.workspace {
+    width: 100%;
+    height: 100%;
+    background-color: var(--workspace-background);
+}
+.statusbar {
+    height: $statusbar-height;
+    border-top: var(--layout-border);
+    -webkit-user-select: none;
+
+    .progress {
+        width: 300px;
+        height: 14px;
+    }
+}
+.wrapper {
+    height: calc(100vh - $menubar-height - $statusbar-height - 1px);
+    display: flex;
+}
+.navbar.vertical {
+    width: $navbar-width;
+    border-right: var(--layout-border);
+    -webkit-user-select: none;
+}
+.navbar.vertical > .navbar-nav {
+    height: 100%;
+    margin: auto;
+}
+.navbar.vertical > *, nav.navbar.vertical > * > * {
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+/* Tooltip scroll bug fix */
+#button-tooltip { position: fixed !important; }
