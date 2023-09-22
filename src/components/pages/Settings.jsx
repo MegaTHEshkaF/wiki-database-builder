@@ -2,9 +2,9 @@ import React from 'react';
 
 const Settings = () => {
     return (
-        <>
-            Settings
-        </>
+        <section id="settings">
+            1
+        </section>
     );
 }
 

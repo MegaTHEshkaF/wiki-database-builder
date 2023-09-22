@@ -16,10 +16,16 @@ $statusbar-height: 26px;
 $navbar-width: 54px;
 
 :root {
+    --workspace-height: calc(100vh - #{$menubar-height} - #{$statusbar-height});
     // Light theme
-    --layout-border: solid 1px #{$gray-200};
-    --workspace-background: #{$gray-200};
+    --layout-border: solid 1px #{$gray-400};
+    --workspace-background: #{$gray-100};
     --menubar-hover: #{$body-tertiary-bg};
+
+    --explorer-bg: #e7f0fa;
+    --database-bg: #e7e7fa;
+    --translation-bg: #f1e7fa;
+    --export-bg: #fae7f0;
 }
 
 html[data-bs-theme=dark] {
@@ -27,6 +33,11 @@ html[data-bs-theme=dark] {
     --layout-border: solid 1px #{$gray-700};
     --workspace-background: #{$gray-800};
     --menubar-hover: #{$body-tertiary-bg-dark};
+
+    --explorer-bg: #2a3540;
+    --database-bg: #2a2f40;
+    --translation-bg: #402a40;
+    --export-bg: #402a2f;
 }
 
 .menubar {
@@ -68,11 +79,6 @@ html[data-bs-theme=dark] {
     }
 }
 
-.workspace {
-    width: 100%;
-    height: 100%;
-    background-color: var(--workspace-background);
-}
 .statusbar {
     height: $statusbar-height;
     border-top: var(--layout-border);
@@ -83,23 +89,62 @@ html[data-bs-theme=dark] {
         height: 14px;
     }
 }
+
 .wrapper {
-    height: calc(100vh - $menubar-height - $statusbar-height - 1px);
+    height: var(--workspace-height);
     display: flex;
-}
-.navbar.vertical {
-    width: $navbar-width;
-    border-right: var(--layout-border);
-    -webkit-user-select: none;
-}
-.navbar.vertical > .navbar-nav {
-    height: 100%;
-    margin: auto;
-}
-.navbar.vertical > *, nav.navbar.vertical > * > * {
-    flex-direction: column !important;
-    justify-content: center !important;
+
+    .navbar.vertical {
+        width: $navbar-width;
+        border-right: var(--layout-border);
+        -webkit-user-select: none;
+
+        .navbar-nav {
+            margin: auto;
+        }
+
+        * {
+            flex-direction: column !important;
+            justify-content: center !important;
+        }
+    }
+    
+    .workspace {
+        width: 100%;
+        height: 100%;
+        background-color: var(--workspace-background);
+
+        section {
+            padding: map-get($spacers, 4);
+            height: 100%;
+        
+            &#explorer {
+                background-color: var(--explorer-bg);
+            }
+            &#database {
+                background-color: var(--database-bg);
+            }
+            &#translation {
+                background-color: var(--translation-bg);
+            }
+            &#export {
+                background-color: var(--export-bg);
+            }
+        }
+        
+        .structure {
+            .row {
+                height: calc(var(--workspace-height) / 2);
+                &:first-child {
+                    border-bottom: var(--layout-border);
+                }
+            }
+            .col:first-child {
+                border-right: var(--layout-border);
+            }
+        }
+    }
 }
 
-/* Tooltip scroll bug fix */
+// Tooltip scroll bug fix 
 #button-tooltip { position: fixed !important; }

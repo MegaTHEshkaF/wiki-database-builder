@@ -2,9 +2,9 @@ import React from 'react';
 
 const Translation = () => {
     return (
-        <>
-            Translation
-        </>
+        <section id="translation">
+            1
+        </section>
     );
 }
 

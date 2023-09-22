@@ -4,7 +4,7 @@ import { Stack, Dropdown } from 'react-bootstrap';
 import { VscChromeMinimize, VscChromeRestore, VscChromeClose } from 'react-icons/vsc';
 import { BsFillLightbulbFill, BsFillLightbulbOffFill } from 'react-icons/bs';
 
-const { ipcRenderer } = window.require('electron');
+const { ipcRenderer, shell } = window.require('electron');
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <button
@@ -46,10 +46,10 @@ const Menubar = () => {
             <Dropdown>
                 <Dropdown.Toggle as={CustomToggle}>Project</Dropdown.Toggle>
                 <Dropdown.Menu>
-                    <Dropdown.Item href="#">Create</Dropdown.Item>
-                    <Dropdown.Item href="#">Load</Dropdown.Item>
+                    <Dropdown.Item href="#">Create <span className="float-end opacity-50">Ctrl+N</span></Dropdown.Item>
+                    <Dropdown.Item href="#">Load <span className="float-end opacity-50">Ctrl+L</span></Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item href="#">Save</Dropdown.Item>
+                    <Dropdown.Item href="#">Save <span className="float-end opacity-50">Ctrl+S</span></Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
 
@@ -58,7 +58,7 @@ const Menubar = () => {
 
                 <Dropdown.Menu>
                     <Dropdown.Item href="#">Watch tutorial</Dropdown.Item>
-                    <Dropdown.Item href="#">Discord support</Dropdown.Item>
+                    <Dropdown.Item onClick={() => shell.openExternal('https://discord.gg/Vrkmkf6HeE')}>Discord support</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
 
