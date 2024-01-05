@@ -11,6 +11,9 @@ import Translation from './components/pages/Translation';
 import Export from './components/pages/Export';
 import Settings from './components/pages/Settings';
 
+import CreateProjectModal from './components/modals/CreateProjectModal';
+import OpenProjectModal from './components/modals/OpenProjectModal';
+
 function App() {
     
     return (
@@ -29,6 +32,9 @@ function App() {
                 </main>
             </div>
             <StatusBar />
+
+            <CreateProjectModal />
+            <OpenProjectModal />
         </>
     );
 }

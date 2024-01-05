@@ -1,12 +1,12 @@
-const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 require('@electron/remote/main').initialize();
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 
 const path = require('path');
 
 const isDev = require('electron-is-dev');
 const isMac = process.platform === 'darwin';
 
-const { installExtension, REACT_DEVELOPER_TOOLS } = require('electron-extension-installer');
+const { installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-extension-installer');
 
 let mainWindow;
 function CreateMainWindow() {
@@ -82,7 +82,7 @@ app.on('ready', () => {
     mainWindow.on('closed', () => (mainWindow = null));
 });
 app.on("ready", async () => {
-    await installExtension(REACT_DEVELOPER_TOOLS, {
+    await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS], {
         loadExtensionOptions: {
             allowFileAccess: true,
         },
@@ -99,7 +99,16 @@ app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) CreateMainWindow();
 });
 
-// Menubar commands
+// Menubar buttons commands
+ipcMain.on('menu:create', (event) => {
+    mainWindow.webContents.send('menu:create');
+});
+ipcMain.on('menu:open', (event) => {
+    mainWindow.webContents.send('menu:open');
+});
+ipcMain.on('menu:save', (event) => {
+    mainWindow.webContents.send('menu:save');
+});
 ipcMain.on('app:minimize', (event) => {
     mainWindow.minimize();
 });
@@ -108,12 +117,6 @@ ipcMain.on('app:maximize-restore', (event) => {
 });
 ipcMain.on('app:close', (event) => {
     mainWindow.close();
-});
-
-// Listen for renderer events
-ipcMain.on('command:loadAssets', (event, importDir, exportDir) => {
-    // console.log(importDir); console.log(exportDir);
-    mainWindow.webContents.send('command:loadAssets', importDir, exportDir);
 });
 
 // Handle render dialog

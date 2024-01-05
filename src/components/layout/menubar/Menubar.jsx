@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Stack, Dropdown } from 'react-bootstrap';
 import { VscChromeMinimize, VscChromeRestore, VscChromeClose } from 'react-icons/vsc';
 import { BsFillLightbulbFill, BsFillLightbulbOffFill } from 'react-icons/bs';
+
+import { useSelector } from 'react-redux';
 
 const { ipcRenderer, shell } = window.require('electron');
 
@@ -20,8 +22,11 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 ));
 
 const Menubar = () => {
+    const locked = useSelector((state) => state.menu.locked);
+    const loaded = useSelector((state) => state.project.loaded);
+
     // Theme manager
-    const [theme, setTheme] = useState(localStorage.getItem('theme'));
+    const [theme, setTheme] = React.useState(localStorage.getItem('theme'));
     React.useEffect(() => {
         document.documentElement.setAttribute('data-bs-theme', localStorage.getItem('theme'));
     });
@@ -34,22 +39,13 @@ const Menubar = () => {
 
     return (
         <Stack className="menubar align-items-stretch" direction="horizontal">
-            <div className="mx-1">
-                <img
-                    alt=""
-                    src={process.env.PUBLIC_URL + "/icon.svg"}
-                    width="24"
-                    height="24"
-                />
-            </div>
-
-            <Dropdown>
+            <Dropdown className="ms-3">
                 <Dropdown.Toggle as={CustomToggle}>Project</Dropdown.Toggle>
                 <Dropdown.Menu>
-                    <Dropdown.Item href="#">Create <span className="float-end opacity-50">Ctrl+N</span></Dropdown.Item>
-                    <Dropdown.Item href="#">Load <span className="float-end opacity-50">Ctrl+L</span></Dropdown.Item>
+                    <Dropdown.Item disabled={locked} onClick={() => ipcRenderer.send('menu:create')}>Create <span className="float-end opacity-50">Ctrl+N</span></Dropdown.Item>
+                    <Dropdown.Item disabled={locked} onClick={() => ipcRenderer.send('menu:open')}>Load <span className="float-end opacity-50">Ctrl+O</span></Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item href="#">Save <span className="float-end opacity-50">Ctrl+S</span></Dropdown.Item>
+                    <Dropdown.Item disabled={!loaded} onClick={() => ipcRenderer.send('menu:save')}>Save <span className="float-end opacity-50">Ctrl+S</span></Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
 
@@ -57,8 +53,8 @@ const Menubar = () => {
                 <Dropdown.Toggle as={CustomToggle}>Help</Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                    <Dropdown.Item href="#">Watch tutorial</Dropdown.Item>
-                    <Dropdown.Item onClick={() => shell.openExternal('https://discord.gg/Vrkmkf6HeE')}>Discord support</Dropdown.Item>
+                    {/* <Dropdown.Item href="#">Watch tutorial</Dropdown.Item> */}
+                    <Dropdown.Item onClick={() => shell.openExternal('https://discord.gg/dKuftHFRJz')}>Discord support</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
 

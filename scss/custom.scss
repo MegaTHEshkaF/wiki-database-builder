@@ -2,13 +2,21 @@
 @import "../node_modules/bootstrap/scss/functions";
 
 // 2. Include any default variable overrides here
+$progress-bar-transition: width .1s;
 
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/variables-dark";
+
+// 4. Include any default map overrides here
+
+// 5. Include remainder of required parts
 @import "../node_modules/bootstrap/scss/maps";
 @import "../node_modules/bootstrap/scss/mixins";
 @import "../node_modules/bootstrap/scss/root";
+
+// 6. Optionally include any other parts as needed
+@import "../node_modules/bootstrap/scss/progress";
 
 // Layout size variables
 $menubar-height: 26px;
@@ -17,15 +25,13 @@ $navbar-width: 54px;
 
 :root {
     --workspace-height: calc(100vh - #{$menubar-height} - #{$statusbar-height});
+    --workspace-width: calc(100vw - #{$navbar-width});
     // Light theme
     --layout-border: solid 1px #{$gray-400};
     --workspace-background: #{$gray-100};
     --menubar-hover: #{$body-tertiary-bg};
 
-    --explorer-bg: #e7f0fa;
     --database-bg: #e7e7fa;
-    --translation-bg: #f1e7fa;
-    --export-bg: #fae7f0;
 }
 
 html[data-bs-theme=dark] {
@@ -33,11 +39,8 @@ html[data-bs-theme=dark] {
     --layout-border: solid 1px #{$gray-700};
     --workspace-background: #{$gray-800};
     --menubar-hover: #{$body-tertiary-bg-dark};
-
-    --explorer-bg: #2a3540;
+    
     --database-bg: #2a2f40;
-    --translation-bg: #402a40;
-    --export-bg: #402a2f;
 }
 
 .menubar {
@@ -46,6 +49,7 @@ html[data-bs-theme=dark] {
     border-bottom: var(--layout-border);
     -webkit-app-region: drag;
     -webkit-user-select: none;
+    user-select: none;
 
     button {
         height: 100%;
@@ -83,6 +87,8 @@ html[data-bs-theme=dark] {
     height: $statusbar-height;
     border-top: var(--layout-border);
     -webkit-user-select: none;
+    user-select: none;
+    font-size: 12px;
 
     .progress {
         width: 300px;
@@ -98,6 +104,7 @@ html[data-bs-theme=dark] {
         width: $navbar-width;
         border-right: var(--layout-border);
         -webkit-user-select: none;
+        user-select: none;
 
         .navbar-nav {
             margin: auto;
@@ -118,17 +125,8 @@ html[data-bs-theme=dark] {
             padding: map-get($spacers, 4);
             height: 100%;
         
-            &#explorer {
-                background-color: var(--explorer-bg);
-            }
             &#database {
                 background-color: var(--database-bg);
-            }
-            &#translation {
-                background-color: var(--translation-bg);
-            }
-            &#export {
-                background-color: var(--export-bg);
             }
         }
         
@@ -139,8 +137,11 @@ html[data-bs-theme=dark] {
                     border-bottom: var(--layout-border);
                 }
             }
-            .col:first-child {
-                border-right: var(--layout-border);
+            .col {
+                width: calc(var(--workspace-width) / 2);
+                &:first-child {
+                    border-right: var(--layout-border);
+                }
             }
         }
     }
