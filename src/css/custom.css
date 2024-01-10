@@ -244,6 +244,7 @@
   --workspace-background: #f8f9fa;
   --menubar-hover: #f8f9fa;
   --database-bg: #e7e7fa;
+  --scrollbar-color: #dcdcdc;
 }
 
 html[data-bs-theme=dark] {
@@ -251,6 +252,7 @@ html[data-bs-theme=dark] {
   --workspace-background: #343a40;
   --menubar-hover: #2b3035;
   --database-bg: #2a2f40;
+  --scrollbar-color: #121212;
 }
 
 .menubar {
@@ -339,6 +341,7 @@ html[data-bs-theme=dark] {
   border-bottom: var(--layout-border);
 }
 .wrapper .workspace .structure .col {
+  height: inherit;
   width: calc(var(--workspace-width) / 2);
 }
 .wrapper .workspace .structure .col:first-child {
@@ -347,4 +350,83 @@ html[data-bs-theme=dark] {
 
 #button-tooltip {
   position: fixed !important;
+}
+
+.table-container {
+  background-color: var(--bs-body-bg);
+  border: var(--layout-border);
+  height: calc(100% - 46px);
+  overflow: auto;
+  position: relative;
+}
+.table-container table {
+  display: grid;
+}
+.table-container table thead {
+  display: grid;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.table-container table thead th {
+  background-color: var(--scrollbar-color);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: small;
+  padding: 0.2rem;
+  font-weight: bold;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.table-container table thead th span {
+  cursor: pointer;
+}
+.table-container table thead .resizer {
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 5px;
+  background-color: var(--bs-primary-text-emphasis);
+  cursor: col-resize;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  touch-action: none;
+  border-radius: 6px;
+}
+.table-container table thead .resizer.isResizing {
+  background-color: var(--bs-primary);
+  opacity: 1;
+}
+.table-container table thead *:hover > .resizer {
+  opacity: 1;
+}
+.table-container table tbody {
+  display: grid;
+  position: relative;
+}
+.table-container table tbody tr {
+  position: absolute;
+}
+.table-container table tbody tr td {
+  font-size: x-small;
+  padding: 0 0.1rem;
+}
+.table-container table tr {
+  display: flex;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-bottom: var(--layout-border);
+}
+.table-container table tr th, .table-container table tr td {
+  border-right: var(--layout-border);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }/*# sourceMappingURL=custom.css.map */

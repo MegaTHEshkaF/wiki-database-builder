@@ -1,119 +1,97 @@
 import React from 'react';
-import { useTable, useFilters, useGlobalFilter, useSortBy, useBlockLayout, useRowSelect } from 'react-table';
+
+import { useReactTable, getCoreRowModel, getSortedRowModel, getFilteredRowModel, flexRender } from '@tanstack/react-table';
+import { useVirtualizer } from '@tanstack/react-virtual';
+
 import ComplexFilter from './ComplexFilter';
 
-import { FixedSizeList } from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import scrollbarWidth from './scrollbarWidth';
+const VirtualComplexTable = ({data, columns}) => {
+    const [globalFilter, setGlobalFilter] = React.useState('');
+    const [columnFilters, setColumnFilters] = React.useState([]);
 
-import { ProjectContext } from './../../context/index';
-
-const path = window.require('path');
-const readUnityFile = require('./../../utils/readUnityFile');
-
-const VirtualComplexTable = ({columns, data, setWindowData}) => {
-    const scrollBarSize = React.useMemo(() => scrollbarWidth(), []);
-    const { project } = React.useContext(ProjectContext);
-
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        totalColumnsWidth,
-        prepareRow,
-        setFilter,
-        setGlobalFilter,
-        setAllFilters,
-        toggleAllRowsSelected,
-    } = useTable({ columns, data }, useFilters, useGlobalFilter, useSortBy, useBlockLayout, useRowSelect);
-
-    const RenderRow = React.useCallback(
-        ({ index, style }) => {
-            const row = rows[index];
-            prepareRow(row);
-            return (
-                <>
-                    <div
-                        {...row.getRowProps({
-                            style,
-                        })}
-                        className={row.isSelected ? 'tr active' : 'tr'}
-                        onClick={(event) => {
-                            // Highlight row on click
-                            const current = row.isSelected;
-                            toggleAllRowsSelected(false);
-                            if (!current) {
-                                const rowDivs = document.querySelectorAll('.table .tr');
-                                rowDivs.forEach(row => row.classList.remove('active'));
-                                row.toggleRowSelected();
-                                event.currentTarget.classList.add('active');
-                            }
-                            // Set window data
-                            // TODO
-                            // automaticly wipe window data after another click
-                            const size = row.values.size.split(" ");
-                            if((size[1] == 'KB' && parseInt(size[0]) > 100) || size[1] == 'MB' || size[1] == 'GB') {
-                                return setWindowData('The file is too big! It will not be shown to avoid memory leak.');
-                            }
-
-                            readUnityFile(path.join(project.importDir, '\\ExportedProject\\Assets\\MonoBehaviour\\', row.values.name)).then(result => {
-                                setWindowData(JSON.stringify(result[0].MonoBehaviour, null, 4));
-                            });
-                        }}
-                    >
-                        {row.cells.map(cell => {
-                            return (
-                                <div {...cell.getCellProps()} className='td'>
-                                    {cell.render('Cell')}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </>
-            );
+    const table = useReactTable({
+        data,
+        columns, 
+        state: {
+            globalFilter,
+            columnFilters,
         },
-        [prepareRow, rows]
-    );
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        columnResizeMode: "onChange",
+    });
+
+    const { rows } = table.getRowModel();
+
+    const tableContainerRef = React.useRef(null);
+
+    const rowVirtualizer = useVirtualizer({
+        count: rows.length,
+        estimateSize: () => 16,
+        getScrollElement: () => tableContainerRef.current,
+        measureElement:
+            typeof window !== 'undefined' &&
+            navigator.userAgent.indexOf('Firefox') === -1
+                ? element => element?.getBoundingClientRect().height
+                : undefined,
+        overscan: 5,
+    });
 
     return (
         <>
-            <ComplexFilter columns={columns} setGlobalFilter={setGlobalFilter} setFilter={setFilter} setAllFilters={setAllFilters} />
-            <div className='virtual-complex-table'>
-                {rows.length !== 0
-                    ? <AutoSizer disableWidth>
-                        {({ height }) => (
-                            <div {...getTableProps()} className='table compact'>
-                                <div>
-                                    {headerGroups.map(headerGroup => (
-                                        <div {...headerGroup.getHeaderGroupProps()} className='tr'>
-                                            {headerGroup.headers.map(column => (
-                                                <div {...column.getHeaderProps(column.getSortByToggleProps())} className='th'>
-                                                    {column.render('Header')}
-                                                    <span className='arrow'>
-                                                        {column.isSorted ? (column.isSortedDesc ? ' ⯅' : ' ⯆') : ''}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ))}
-                                </div>
+            <ComplexFilter columns={table.getAllColumns()} setGlobalFilter={setGlobalFilter} setColumnFilters={setColumnFilters} />
 
-                                <div {...getTableBodyProps()}>
-                                    <FixedSizeList
-                                        height={height}
-                                        itemCount={rows.length}
-                                        itemSize={20}
-                                        width={totalColumnsWidth + scrollBarSize}
+            <div className="table-container" ref={tableContainerRef}>
+                { rows.length !== 0
+                    ? <table className="my-table" style={{width: table.getTotalSize()}}>
+                        <thead>
+                            {table.getHeaderGroups().map(headerGroup => (
+                                <tr className="tr" key={headerGroup.id}>
+                                    {headerGroup.headers.map(header => (
+                                        <th className="th" key={header.id} style={{width: header.getSize()}}>
+                                            <span onClick={header.column.getToggleSortingHandler()}>{header.column.columnDef.header}
+                                                {
+                                                    {
+                                                        asc: " ⯅",
+                                                        desc: " ⯆",
+                                                    }[header.column.getIsSorted()]
+                                                }
+                                            </span>
+                                            <div 
+                                                className={`resizer ${header.column.getIsResizing() ? "isResizing" : ""}`}
+                                                onMouseDown={header.getResizeHandler()}
+                                                onTouchStart={header.getResizeHandler()}
+                                            />
+                                        </th>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody style={{height: `${rowVirtualizer.getTotalSize()}px`}}>
+                            {rowVirtualizer.getVirtualItems().map(virtualRow => {
+                                const row = rows[virtualRow.index];
+                                return (
+                                    <tr 
+                                        className="tr" 
+                                        data-index={virtualRow.index}
+                                        ref={node => rowVirtualizer.measureElement(node)}
+                                        key={row.id}
+                                        style={{
+                                            transform: `translateY(${virtualRow.start}px)`,
+                                        }}
                                     >
-                                        {RenderRow}
-                                    </FixedSizeList>
-                                </div>
-                            </div>
-                        )}
-                    </AutoSizer>
-                    : <div className='h-100 d-flex fs-2 justify-content-center align-items-center text-muted'>Nothing found</div>
-                }
+                                        {row.getVisibleCells().map(cell => (
+                                            <td className="td" key={cell.id} style={{width: cell.column.getSize()}}>
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                : <div className='h-100 d-flex fs-2 justify-content-center align-items-center text-muted'>Nothing found</div> }
             </div>
         </>
     );

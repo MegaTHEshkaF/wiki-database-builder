@@ -1,22 +1,29 @@
 import React from 'react';
+
 import { Form, InputGroup } from 'react-bootstrap';
 
-const ComplexFilter = ({columns, setGlobalFilter, setFilter, setAllFilters }) => {
+const ComplexFilter = ({columns, setGlobalFilter, setColumnFilters}) => {
     const [selectedFilter, setSelectedFilter] = React.useState('All');
     const [filterValue, setFilterValue] = React.useState('');
 
     React.useEffect(() => {
-        const timeoutReference = setTimeout(() => {
+        const intervalId = setTimeout(() => {
             setGlobalFilter('');
-            setAllFilters([]);
+            setColumnFilters([]);
 
-            if(selectedFilter === 'All')
+            if(selectedFilter === 'All') {
                 setGlobalFilter(filterValue);
-            else
-                setFilter(columns.find(e => e.Header === selectedFilter).accessor, filterValue);
+            }
+            else {
+                const column = columns.find(column => column.columnDef.header === selectedFilter);
+                setColumnFilters([{
+                    id: column.id,
+                    value: filterValue,
+                }]);
+            }
         }, 750);
-        return () => clearTimeout(timeoutReference);
-    }, [setGlobalFilter, setAllFilters, columns, setFilter, selectedFilter, filterValue]);
+        return () => clearTimeout(intervalId);
+    }, [columns, setGlobalFilter, setColumnFilters, selectedFilter, filterValue]);
 
     return (
         <InputGroup className="mb-3" size="sm">
@@ -26,8 +33,8 @@ const ComplexFilter = ({columns, setGlobalFilter, setFilter, setAllFilters }) =>
                 onChange={e => setSelectedFilter(e.target.value)}
             >
                 <option>All</option>
-                {columns.map((column) => (
-                    column.disableFilters ? null : (<option key={column.accessor}>{column.Header}</option>)
+                {columns.map(column => (
+                    column.getCanFilter() ? <option key={column.id}>{column.columnDef.header}</option> : null
                 ))}
             </Form.Select>
             <Form.Control 

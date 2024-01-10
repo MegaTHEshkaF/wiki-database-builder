@@ -14,27 +14,31 @@ import Settings from './components/pages/Settings';
 import CreateProjectModal from './components/modals/CreateProjectModal';
 import OpenProjectModal from './components/modals/OpenProjectModal';
 
+import AssetsTableDataProvider from './context/AssetsTableDataProvider';
+
 function App() {
     
     return (
         <>
-            <Menubar />
-            <div className='wrapper'>
-                <Navbar />
-                <main className='workspace'>
-                    <Routes>
-                        <Route path='/' element={<Home />} />
-                        <Route path='/structure' element={<Structure />} />
-                        <Route path='/translation' element={<Translation />} />
-                        <Route path='/export' element={<Export />} />
-                        <Route path='/settings' element={<Settings />} />
-                    </Routes>
-                </main>
-            </div>
-            <StatusBar />
+            <AssetsTableDataProvider>
+                <Menubar />
+                <div className='wrapper'>
+                    <Navbar />
+                    <main className='workspace'>
+                        <Routes>
+                            <Route path='/' element={<Home />} />
+                            <Route path='/structure' element={<Structure />} />
+                            <Route path='/translation' element={<Translation />} />
+                            <Route path='/export' element={<Export />} />
+                            <Route path='/settings' element={<Settings />} />
+                        </Routes>
+                    </main>
+                </div>
+                <StatusBar />
 
-            <CreateProjectModal />
-            <OpenProjectModal />
+                <CreateProjectModal />
+                <OpenProjectModal />
+            </AssetsTableDataProvider>
         </>
     );
 }

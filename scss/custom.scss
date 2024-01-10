@@ -32,6 +32,7 @@ $navbar-width: 54px;
     --menubar-hover: #{$body-tertiary-bg};
 
     --database-bg: #e7e7fa;
+    --scrollbar-color: #dcdcdc;
 }
 
 html[data-bs-theme=dark] {
@@ -41,6 +42,7 @@ html[data-bs-theme=dark] {
     --menubar-hover: #{$body-tertiary-bg-dark};
     
     --database-bg: #2a2f40;
+    --scrollbar-color: #121212;
 }
 
 .menubar {
@@ -138,6 +140,7 @@ html[data-bs-theme=dark] {
                 }
             }
             .col {
+                height: inherit;
                 width: calc(var(--workspace-width) / 2);
                 &:first-child {
                     border-right: var(--layout-border);
@@ -149,3 +152,98 @@ html[data-bs-theme=dark] {
 
 // Tooltip scroll bug fix 
 #button-tooltip { position: fixed !important; }
+
+.table-container {
+    background-color: var(--bs-body-bg);
+    border: var(--layout-border);
+    height: calc(100% - 46px);
+    overflow: auto;
+    position: relative;
+
+    table {
+        display: grid;
+
+        thead {
+            display: grid;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+
+            th {
+                background-color: var(--scrollbar-color);
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: small;
+                padding: .2rem;
+                font-weight: bold;
+                text-align: center;
+                user-select: none;
+
+                span {
+                    cursor: pointer;
+                }
+            }
+
+            .resizer {
+                position: absolute;
+                opacity: 0;
+                top: 0;
+                right: 0;
+                height: 100%;
+                width: 5px;
+                background-color: var(--bs-primary-text-emphasis);
+                cursor: col-resize;
+                user-select: none;
+                touch-action: none;
+                border-radius: 6px;
+    
+                &.isResizing {
+                    background-color: var(--bs-primary);
+                    opacity: 1;
+                }
+            }
+            *:hover > .resizer {
+                opacity: 1;
+            }
+        }
+        tbody {
+            display: grid;
+            position: relative;
+
+            tr {
+                position: absolute;
+
+                td {
+                    font-size: x-small;
+                    padding: 0 .1rem;
+                }
+            }
+        }
+
+        tr {
+            display: flex;
+            width: fit-content;
+            border-bottom: var(--layout-border);
+
+            th, td {
+                border-right: var(--layout-border);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+}
+
+// // .virtual-complex-table .th:hover {
+// //     background-color: var(--bs-gray-400);
+// // }
+// // .virtual-complex-table .tr {
+// //     background: white;
+// // }
+// // .virtual-complex-table .tr.active {
+// //     background: #0d6efd;
+// //     color: white;
+// // }

@@ -8,6 +8,7 @@ import { setText } from '../../features/statusBarSlice';
 import loadAssets from '../../utils/loadAssets';
 
 import { useNavigate } from 'react-router-dom';
+import { AssetsTableContext } from '../../context';
 
 const { ipcRenderer } = window.require('electron');
 const fs = window.require('fs');
@@ -16,6 +17,7 @@ const path = window.require('path');
 const OpenProjectModal = () => {
     const locked = useSelector((state) => state.menu.locked);
     const dispatch = useDispatch();
+    const { setData } = React.useContext(AssetsTableContext);
 
     const navigate = useNavigate();
 
@@ -52,10 +54,11 @@ const OpenProjectModal = () => {
                 dispatch(unlock());
                 dispatch(setText(`Finished loading ${cacheData.length} assets from cache`));
 
+                setData(cacheData);
                 return navigate('/structure');
             }
             else {
-                loadAssets(importDir, exportDir, dispatch).then(result => {
+                loadAssets(importDir, exportDir, dispatch, setData).then(result => {
                     return navigate('/structure');
                 });
             }

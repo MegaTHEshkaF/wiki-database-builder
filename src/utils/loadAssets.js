@@ -6,13 +6,13 @@ const fs = window.require('fs');
 const path = window.require('path');
 const readUnityFile = require('./readUnityFile');
 
-async function loadAssets(importDir, exportDir, dispatch) {
+async function loadAssets(importDir, exportDir, dispatch, setData) {
     // Lock menu commands
     dispatch(lock());
     // Remove all data about project
     dispatch(unload());
 
-    const assets = [];
+    const assetsData = [];
 
     const MBDir = path.join(importDir, 'ExportedProject', 'Assets', 'MonoBehaviour\\');
     const fileNames = fs.readdirSync(MBDir);
@@ -37,8 +37,8 @@ async function loadAssets(importDir, exportDir, dispatch) {
             currentNow = name;
             currentText = file[0].MonoBehaviour.Settings.Identifier.Path;
 
-            assets.push({
-                id: file[0].MonoBehaviour.Settings.Identifier.Guid.Value,
+            assetsData.push({
+                id: String(file[0].MonoBehaviour.Settings.Identifier.Guid.Value),
                 name: fileNames[name],
                 container: file[0].MonoBehaviour.Settings.Identifier.Path,
                 size: fileStats.size,
@@ -54,15 +54,14 @@ async function loadAssets(importDir, exportDir, dispatch) {
     dispatch(setLoaded());
     
     dispatch(setNow(0));
-    dispatch(setText(`Finished loading ${assets.length} assets`));
+    dispatch(setText(`Finished loading ${assetsData.length} assets`));
     
     fs.mkdirSync(path.join(exportDir, 'cache'), { recursive: true });
-    fs.writeFileSync(path.join(exportDir, 'cache', 'MonoBehaviour.json'), JSON.stringify(assets, null, 4));
+    fs.writeFileSync(path.join(exportDir, 'cache', 'MonoBehaviour.json'), JSON.stringify(assetsData, null, 4));
 
-    // console.log(assets);
-    dispatch(unlock());
+    setData(assetsData);
 
-    return;
+    return dispatch(unlock());
 }
 
 function formatBytes(bytes, decimals = 2) {

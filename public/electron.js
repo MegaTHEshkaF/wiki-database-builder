@@ -12,8 +12,8 @@ let mainWindow;
 function CreateMainWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-            minWidth: 1280,
-            minHeight: 720,
+            minWidth: 1024,
+            minHeight: 768,
             icon: path.join(__dirname, '/favicon.ico'),
             titleBarStyle: "hidden",
             webPreferences: {

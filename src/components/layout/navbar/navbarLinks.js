@@ -1,8 +1,13 @@
-import { BsGrid3X3GapFill, BsTranslate, BsFillHouseDownFill, BsGearFill } from 'react-icons/bs';
+import { BsHouse, BsGrid3X3GapFill, BsTranslate, BsFillHouseDownFill, BsGearFill } from 'react-icons/bs';
 
 const size = 30;
 
 export const NAVBAR_LINKS = [
+    {
+        to: '/',
+        title: 'Home',
+        icon: <BsHouse size={size} />,
+    },
     {
         to: '/structure',
         title: 'Structure',

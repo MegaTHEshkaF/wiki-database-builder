@@ -2,25 +2,28 @@ import React from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
-import { useSelector } from 'react-redux';
+import VirtualComplexTable from '../tables/VirtualComplexTable';
+
+import { FILES_TABLE_COLUMNS } from '../tables/columns';
+import { AssetsTableContext } from '../../context';
 
 const Structure = () => {
-    const a = useSelector((state) => state.project.importDir);
-    const b = useSelector((state) => state.project.exportDir);
+    // const [data, setData] = React.useState(JSON.parse(fs.readFileSync('C:\\Users\\pachk\\Documents\\HellIsOthers\\WDB PROJECT\\cache\\MonoBehaviour.json'), 'utf8')); // For tests
+    const { data } = React.useContext(AssetsTableContext);
+    const columns = React.useMemo(() => FILES_TABLE_COLUMNS, []);
+
 
     return (
         <Container fluid className="structure g-0">
             <Row className="g-0">
                 <Col className="g-0">
                     <section id="explorer">
-                        1
-                        {a}
+                        <VirtualComplexTable data={data} columns={columns} />
                     </section>
                 </Col>
                 <Col className="g-0">
                     <section id="explorer">
                         2
-                        {b}
                     </section>
                 </Col>
             </Row>
