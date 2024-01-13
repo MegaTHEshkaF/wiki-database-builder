@@ -9,9 +9,8 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "react-contexify/dist/ReactContexify.css";
 import './css/custom.css';
-// import './css/index.css';
-// import './js/colorMode';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

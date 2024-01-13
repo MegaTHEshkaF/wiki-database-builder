@@ -9,8 +9,6 @@ const { ipcRenderer, shell } = window.require('electron');
 const Home = () => {
     const locked = useSelector((state) => state.menu.locked);
 
-    // Добавить инструкцию
-
     return (
         <section id="home">
             <div className="d-flex h-100 flex-column justify-content-center align-items-center">

@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { setImportDir, setExportDir } from '../../features/projectSlice';
 import { setText } from '../../features/statusBarSlice';
 
-import { AssetsTableContext } from '../../context';
+import { ExplorerContext } from '../../context';
 
 import loadAssets from '../../utils/loadAssets';
 
@@ -23,7 +23,7 @@ const path = window.require('path');
 const CreateProjectModal = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { setData } = React.useContext(AssetsTableContext);
+    const { setTableData } = React.useContext(ExplorerContext);
 
     const modalRef = React.useRef(null);
 
@@ -56,7 +56,7 @@ const CreateProjectModal = () => {
         modalRef.current.handleClose();
         reset();
 
-        loadAssets(importDir, exportDir, dispatch, setData).then(result => {
+        loadAssets(importDir, exportDir, dispatch, setTableData).then(result => {
             return navigate('/structure');
         });
     }

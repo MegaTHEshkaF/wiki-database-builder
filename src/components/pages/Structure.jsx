@@ -2,14 +2,30 @@ import React from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
-import VirtualComplexTable from '../tables/VirtualComplexTable';
+import ExplorerTable from '../explorer/ExplorerTable';
 
-import { FILES_TABLE_COLUMNS } from '../tables/columns';
-import { AssetsTableContext } from '../../context';
+import { FILES_TABLE_COLUMNS } from '../explorer/columns';
+import { ExplorerContext } from '../../context';
+import ExplorerWindow from '../explorer/ExplorerWindow';
+
+const fs = window.require('fs');
+const readUnityFile = require('../../utils/readUnityFile');
 
 const Structure = () => {
-    // const [data, setData] = React.useState(JSON.parse(fs.readFileSync('C:\\Users\\pachk\\Documents\\HellIsOthers\\WDB PROJECT\\cache\\MonoBehaviour.json'), 'utf8')); // For tests
-    const { data } = React.useContext(AssetsTableContext);
+    // FOR TESTS
+    const [tableData, setData] = React.useState(JSON.parse(fs.readFileSync('C:\\Users\\pachk\\Documents\\HellIsOthers\\WDB PROJECT\\cache\\MonoBehaviour.json'), 'utf8'));
+    const [windowData, setWindowData] = React.useState({});
+
+    React.useEffect(() => {
+        async function fetchData() {
+            const file = await readUnityFile('C:\\Users\\pachk\\Documents\\HellIsOthers\\ExportedProject\\Assets\\MonoBehaviour\\Weapon_MissHarvey++.asset');
+            setWindowData(file[0]);
+        }
+        fetchData();
+    },[]);
+    //
+
+    // const { tableData, windowData } = React.useContext(ExplorerContext);
     const columns = React.useMemo(() => FILES_TABLE_COLUMNS, []);
 
 
@@ -18,12 +34,12 @@ const Structure = () => {
             <Row className="g-0">
                 <Col className="g-0">
                     <section id="explorer">
-                        <VirtualComplexTable data={data} columns={columns} />
+                        <ExplorerTable data={tableData} columns={columns} />
                     </section>
                 </Col>
                 <Col className="g-0">
                     <section id="explorer">
-                        2
+                        <ExplorerWindow data={windowData} />
                     </section>
                 </Col>
             </Row>

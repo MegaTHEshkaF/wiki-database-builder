@@ -5,9 +5,12 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 
 import ComplexFilter from './ComplexFilter';
 
-const VirtualComplexTable = ({data, columns}) => {
+import { Menu, Item, useContextMenu } from "react-contexify";
+
+const ExplorerTable = ({data, columns}) => {
     const [globalFilter, setGlobalFilter] = React.useState('');
     const [columnFilters, setColumnFilters] = React.useState([]);
+    const [rowSelection, setRowSelection] = React.useState([]);
 
     const table = useReactTable({
         data,
@@ -15,11 +18,15 @@ const VirtualComplexTable = ({data, columns}) => {
         state: {
             globalFilter,
             columnFilters,
+            rowSelection,
         },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         columnResizeMode: "onChange",
+        onRowSelectionChange: setRowSelection,
+        enableRowSelection: true,
+        enableMultiRowSelection: false,
     });
 
     const { rows } = table.getRowModel();
@@ -37,6 +44,20 @@ const VirtualComplexTable = ({data, columns}) => {
                 : undefined,
         overscan: 5,
     });
+
+    const { show } = useContextMenu({ id: 'table-cell' });
+    function displayMenu(e) {
+        show({
+            event: e,
+        });
+    }
+    function handleItemClick({ id, triggerEvent }) {
+        switch (id) {
+            case "copy-text":
+                navigator.clipboard.writeText(triggerEvent.target.textContent);
+                break;
+        }
+    }
 
     return (
         <>
@@ -73,16 +94,18 @@ const VirtualComplexTable = ({data, columns}) => {
                                 const row = rows[virtualRow.index];
                                 return (
                                     <tr 
-                                        className="tr" 
+                                        className={`tr ${row.getIsSelected() ? "selected" : ""}`}
                                         data-index={virtualRow.index}
                                         ref={node => rowVirtualizer.measureElement(node)}
                                         key={row.id}
                                         style={{
                                             transform: `translateY(${virtualRow.start}px)`,
                                         }}
+                                        onClick={row.getToggleSelectedHandler()}
+                                        onContextMenu={row.getToggleSelectedHandler()}
                                     >
                                         {row.getVisibleCells().map(cell => (
-                                            <td className="td" key={cell.id} style={{width: cell.column.getSize()}}>
+                                            <td className="td" key={cell.id} style={{width: cell.column.getSize()}} onContextMenu={displayMenu}>
                                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                             </td>
                                         ))}
@@ -93,8 +116,12 @@ const VirtualComplexTable = ({data, columns}) => {
                     </table>
                 : <div className='h-100 d-flex fs-2 justify-content-center align-items-center text-muted'>Nothing found</div> }
             </div>
+            
+            <Menu id="table-cell" animation={false}>
+                <Item onClick={handleItemClick} id="copy-text">Copy text</Item>
+            </Menu>
         </>
     );
 }
 
-export default React.memo(VirtualComplexTable);
+export default React.memo(ExplorerTable);

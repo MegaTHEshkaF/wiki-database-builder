@@ -1,0 +1,25 @@
+.contexify {
+    background-color: var(--bs-body-bg);
+    box-shadow: none;
+    border: var(--bs-border-width) solid var(--bs-border-color-translucent);
+    border-radius: var(--bs-border-radius);
+    min-width: 10rem;
+    padding: 0.5rem 0;
+}
+.contexify_itemContent {
+    color: var(--bs-body-color);
+    font-size: 1rem;
+    padding: 0.25rem 1rem;
+}
+.contexify_item:not(.contexify_item-disabled):hover > .contexify_itemContent, 
+.contexify_item:not(.contexify_item-disabled):focus > .contexify_itemContent {
+    border-radius: 0;
+}
+.contexify_item:not(.contexify_item-disabled):hover > .contexify_itemContent {
+    background-color: var(--bs-tertiary-bg);
+    color: var(--bs-body-color);
+}
+.contexify_item:not(.contexify_item-disabled):focus > .contexify_itemContent {
+    background-color: var(--bs-primary);
+    color: #fff;
+}

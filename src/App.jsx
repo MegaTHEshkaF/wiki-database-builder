@@ -14,13 +14,13 @@ import Settings from './components/pages/Settings';
 import CreateProjectModal from './components/modals/CreateProjectModal';
 import OpenProjectModal from './components/modals/OpenProjectModal';
 
-import AssetsTableDataProvider from './context/AssetsTableDataProvider';
+import ExplorerProvider from './context/ExplorerProvider';
 
 function App() {
     
     return (
         <>
-            <AssetsTableDataProvider>
+            <ExplorerProvider>
                 <Menubar />
                 <div className='wrapper'>
                     <Navbar />
@@ -38,7 +38,7 @@ function App() {
 
                 <CreateProjectModal />
                 <OpenProjectModal />
-            </AssetsTableDataProvider>
+            </ExplorerProvider>
         </>
     );
 }
