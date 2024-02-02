@@ -3,7 +3,7 @@ import { ExplorerContext } from '.';
 
 const ExplorerProvider = ({children}) => {
     const [tableData, setTableData] = React.useState([]);
-    const [windowData, setWindowData] = React.useState('');
+    const [windowData, setWindowData] = React.useState({});
 
     const explorerContext = React.useMemo(() => ({
         tableData,

@@ -230,6 +230,7 @@ html[data-bs-theme=dark] {
     width: 100%;
     border: solid 1px var(--bs-border-color);
     overflow: scroll;
+    background-color: var(--bs-body-bg);
 
     pre {
         font-size: 12px;

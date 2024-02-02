@@ -29,16 +29,18 @@ async function loadAssets(importDir, exportDir, dispatch, setData) {
         if(!fileNames[name].endsWith('.asset')) continue;
 
         try {
-            const file = await readUnityFile(MBDir + fileNames[name]);
+            const filePath = MBDir + fileNames[name];
+            const file = await readUnityFile(filePath);
             if(!file[0].MonoBehaviour.Settings) continue;
             
-            const fileStats = await fs.promises.stat(MBDir + fileNames[name]);
+            const fileStats = await fs.promises.stat(filePath);
             
             currentNow = name;
             currentText = file[0].MonoBehaviour.Settings.Identifier.Path;
 
             assetsData.push({
                 id: String(file[0].MonoBehaviour.Settings.Identifier.Guid.Value),
+                path: filePath,
                 name: fileNames[name],
                 container: file[0].MonoBehaviour.Settings.Identifier.Path,
                 size: fileStats.size,

@@ -5,12 +5,20 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 
 import ComplexFilter from './ComplexFilter';
 
+import { ExplorerContext } from '../../context';
+
 import { Menu, Item, useContextMenu } from "react-contexify";
 
+const readUnityFile = require('../../utils/readUnityFile');
+
 const ExplorerTable = ({data, columns}) => {
+    // ФИЛЬТРЫ И ВЫБРАННЫЕ СТРОКИ СБРАСЫВАЮТСЯ ПРИ ИСПОЛЬЗОВАНИИ ROUTE
+    // ПОПРОБОВАТЬ ПЕРЕНЕСТИ НА REDUX
     const [globalFilter, setGlobalFilter] = React.useState('');
     const [columnFilters, setColumnFilters] = React.useState([]);
     const [rowSelection, setRowSelection] = React.useState([]);
+
+    const { setWindowData } = React.useContext(ExplorerContext);
 
     const table = useReactTable({
         data,
@@ -58,6 +66,16 @@ const ExplorerTable = ({data, columns}) => {
                 break;
         }
     }
+
+    React.useEffect(() => {
+        async function fetchData() {
+            if(!table.getIsSomeRowsSelected()) return;
+
+            const file = await readUnityFile(table.getSelectedRowModel().flatRows[0].original.path);
+            setWindowData(file[0]);
+        }
+        fetchData();
+    }, [setWindowData, rowSelection, table]);
 
     return (
         <>

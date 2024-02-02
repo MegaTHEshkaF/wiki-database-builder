@@ -9,25 +9,14 @@ import { ExplorerContext } from '../../context';
 import ExplorerWindow from '../explorer/ExplorerWindow';
 
 const fs = window.require('fs');
-const readUnityFile = require('../../utils/readUnityFile');
 
 const Structure = () => {
     // FOR TESTS
     const [tableData, setData] = React.useState(JSON.parse(fs.readFileSync('C:\\Users\\pachk\\Documents\\HellIsOthers\\WDB PROJECT\\cache\\MonoBehaviour.json'), 'utf8'));
-    const [windowData, setWindowData] = React.useState({});
-
-    React.useEffect(() => {
-        async function fetchData() {
-            const file = await readUnityFile('C:\\Users\\pachk\\Documents\\HellIsOthers\\ExportedProject\\Assets\\MonoBehaviour\\Weapon_MissHarvey++.asset');
-            setWindowData(file[0]);
-        }
-        fetchData();
-    },[]);
-    //
+    const { windowData } = React.useContext(ExplorerContext);
 
     // const { tableData, windowData } = React.useContext(ExplorerContext);
     const columns = React.useMemo(() => FILES_TABLE_COLUMNS, []);
-
 
     return (
         <Container fluid className="structure g-0">

@@ -17,7 +17,8 @@ import OpenProjectModal from './components/modals/OpenProjectModal';
 import ExplorerProvider from './context/ExplorerProvider';
 
 function App() {
-    
+    // ROUTER НЕ ПОДХОДИТ ДЛЯ ЦЕЛЕЙ
+    // ЗАМЕНИТЬ НА TABBER (НАЙТИ КАК СДЕЛАТЬ АНАЛОГ NAV.LINK)
     return (
         <>
             <ExplorerProvider>
