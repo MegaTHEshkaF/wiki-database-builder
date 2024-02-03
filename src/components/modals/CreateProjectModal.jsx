@@ -9,12 +9,11 @@ import MyModal from './MyModal';
 import { useDispatch } from 'react-redux';
 import { setImportDir, setExportDir } from '../../features/projectSlice';
 import { setText } from '../../features/statusBarSlice';
+import { setTab } from '../../features/navbarSlice';
 
 import { ExplorerContext } from '../../context';
 
 import loadAssets from '../../utils/loadAssets';
-
-import { useNavigate } from 'react-router-dom';
 
 const { ipcRenderer } = window.require('electron');
 const fs = window.require('fs');
@@ -22,7 +21,6 @@ const path = window.require('path');
 
 const CreateProjectModal = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const { setTableData } = React.useContext(ExplorerContext);
 
     const modalRef = React.useRef(null);
@@ -57,7 +55,7 @@ const CreateProjectModal = () => {
         reset();
 
         loadAssets(importDir, exportDir, dispatch, setTableData).then(result => {
-            return navigate('/structure');
+            return dispatch(setTab('Structure'));
         });
     }
 

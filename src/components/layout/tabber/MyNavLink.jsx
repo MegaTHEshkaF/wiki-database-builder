@@ -1,8 +1,7 @@
 import React from 'react';
 import { Nav, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 
-const MyNavLink = ({to, title, icon, separator}) => {
+const MyNavLink = ({title, icon, separator, onClick}) => {
     const renderTooltip = (props) => (
         <Tooltip id="button-tooltip" {...props}>
             {title}
@@ -15,11 +14,9 @@ const MyNavLink = ({to, title, icon, separator}) => {
             overlay={renderTooltip}
         >
             <div className={separator ? 'mt-auto' : ''}>
-                <LinkContainer to={to}>
-                    <Nav.Link active={false}> {/* To work properly with React Router Nav.Lnik must have active={false} property */}
-                        {icon}
-                    </Nav.Link>
-                </LinkContainer>
+                <Nav.Link active={false} onClick={onClick}>
+                    {icon}
+                </Nav.Link>
             </div>
         </OverlayTrigger>
     );

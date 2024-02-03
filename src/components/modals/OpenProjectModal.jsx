@@ -4,11 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { lock, unlock } from '../../features/menuSlice';
 import { setImportDir, setExportDir, setLoaded } from '../../features/projectSlice';
 import { setText } from '../../features/statusBarSlice';
+import { setTab } from '../../features/navbarSlice';
+
+import { ExplorerContext } from '../../context';
 
 import loadAssets from '../../utils/loadAssets';
-
-import { useNavigate } from 'react-router-dom';
-import { ExplorerContext } from '../../context';
 
 const { ipcRenderer } = window.require('electron');
 const fs = window.require('fs');
@@ -18,8 +18,6 @@ const OpenProjectModal = () => {
     const locked = useSelector((state) => state.menu.locked);
     const dispatch = useDispatch();
     const { setTableData } = React.useContext(ExplorerContext);
-
-    const navigate = useNavigate();
 
     // Listen for command
     React.useEffect(() => {
@@ -55,11 +53,11 @@ const OpenProjectModal = () => {
                 dispatch(setText(`Finished loading ${cacheData.length} assets from cache`));
 
                 setTableData(cacheData);
-                return navigate('/structure');
+                return dispatch(setTab('Structure'));
             }
             else {
                 loadAssets(importDir, exportDir, dispatch, setTableData).then(result => {
-                    return navigate('/structure');
+                    return dispatch(setTab('Structure'));
                 });
             }
         });

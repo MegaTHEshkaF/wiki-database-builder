@@ -334,47 +334,57 @@ html[data-bs-theme=dark] {
   height: 14px;
 }
 
-.wrapper {
+.tabber {
   height: var(--workspace-height);
   display: flex;
 }
-.wrapper .navbar.vertical {
+.tabber .navbar.vertical {
   width: 54px;
   border-right: var(--layout-border);
   -webkit-user-select: none;
   -moz-user-select: none;
        user-select: none;
 }
-.wrapper .navbar.vertical .navbar-nav {
+.tabber .navbar.vertical .navbar-nav {
   margin: auto;
 }
-.wrapper .navbar.vertical * {
+.tabber .navbar.vertical * {
   flex-direction: column !important;
   justify-content: center !important;
 }
-.wrapper .workspace {
+.tabber .tabs {
   width: 100%;
   height: 100%;
-  background-color: var(--workspace-background);
 }
-.wrapper .workspace section {
+.tabber .tabs .tab {
+  width: inherit;
+  height: inherit;
+  background-color: var(--workspace-background);
+  display: none;
+}
+.tabber .tabs .tab.active {
+  display: block;
+}
+
+section {
   padding: 1.5rem;
   height: 100%;
 }
-.wrapper .workspace section#database {
+section#database {
   background-color: var(--database-bg);
 }
-.wrapper .workspace .structure .row {
+
+.structure .row {
   height: calc(var(--workspace-height) / 2);
 }
-.wrapper .workspace .structure .row:first-child {
+.structure .row:first-child {
   border-bottom: var(--layout-border);
 }
-.wrapper .workspace .structure .col {
+.structure .col {
   height: inherit;
   width: calc(var(--workspace-width) / 2);
 }
-.wrapper .workspace .structure .col:first-child {
+.structure .col:first-child {
   border-right: var(--layout-border);
 }
 
