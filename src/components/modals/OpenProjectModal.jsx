@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { lock, unlock } from '../../features/menuSlice';
 import { setImportDir, setExportDir, setLoaded } from '../../features/projectSlice';
 import { setText } from '../../features/statusBarSlice';
-import { setTab } from '../../features/navbarSlice';
+import { setTab } from '../../features/tabberSlice';
 
 import { ExplorerContext } from '../../context';
 

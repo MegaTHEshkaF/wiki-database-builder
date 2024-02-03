@@ -5,7 +5,7 @@ const initialState = {
     selectedIndex: 0,
 }
 
-export const navbarSlice = createSlice({
+export const tabberSlice = createSlice({
     name: 'navbar',
     initialState,
     reducers: {
@@ -19,6 +19,6 @@ export const navbarSlice = createSlice({
     }
 });
 
-export const { setSelectedIndex, setTab } = navbarSlice.actions;
+export const { setSelectedIndex, setTab } = tabberSlice.actions;
 
-export default navbarSlice.reducer;
+export default tabberSlice.reducer;

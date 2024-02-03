@@ -33,6 +33,5 @@ export const NAVBAR_LINKS = [
         title: 'Settings',
         icon: <BsGearFill size={size} />,
         content: <Settings />,
-        separator: true,
     },
 ];

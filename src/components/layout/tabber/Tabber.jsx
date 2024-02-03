@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedIndex } from '../../../features/navbarSlice';
+import { setSelectedIndex } from '../../../features/tabberSlice';
 
 import { Navbar, Nav } from 'react-bootstrap';
 import { NAVBAR_LINKS as navbarLinks } from './navbarLinks';

@@ -9,7 +9,7 @@ import MyModal from './MyModal';
 import { useDispatch } from 'react-redux';
 import { setImportDir, setExportDir } from '../../features/projectSlice';
 import { setText } from '../../features/statusBarSlice';
-import { setTab } from '../../features/navbarSlice';
+import { setTab } from '../../features/tabberSlice';
 
 import { ExplorerContext } from '../../context';
 
